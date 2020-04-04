@@ -30,10 +30,10 @@
             xs,
             ys
         }) => {
-            console.log(Object.values(xs));
+            // console.log(Object.values(xs));
             return ({
                 xs: Object.values(xs),
-                ys: Object.values(ys.diagnosis)
+                ys: Object.values([ys.diagnosis])
             })
         }).batch(10); // YOUR CODE HERE
 
@@ -64,10 +64,10 @@
             xs,
             ys
         }) => {
-            console.log(Object.values(xs));
+            // console.log(Object.values(xs));
             return ({
                 xs: Object.values(xs),
-                ys: Object.values(ys.diagnosis)
+                ys: Object.values([ys.diagnosis])
             })
         }).batch(10); // YOUR CODE HERE
 
@@ -89,36 +89,37 @@
         const model = tf.sequential();
         // YOUR CODE HERE
         model.add(tf.layers.dense({
-            inputShape: [numOfFeatures],
-            activation: "relu",
-            units: 30
-        }));
-        model.add(tf.layers.dense({
-            activation: "relu",
-            units: 16
-        }));
-        model.add(tf.layers.dense({
-            activation: "relu",
-            units: 8
-        }));
-        model.add(tf.layers.dense({
-            activation: "relu",
-            units: 4
-        }));
-        model.add(tf.layers.dense({
-            activation: "relu",
-            units: 2
-        }));
-        model.add(tf.layers.dense({
-            activation: "sigmoid",
-            units: 1
-        }));
+        inputShape: [numOfFeatures],
+        activation: "relu",
+        units: 31
+    }));
+    model.add(tf.layers.dense({
+        activation: "relu",
+        units: 16
+    }));
+    model.add(tf.layers.dense({
+        activation: "relu",
+        units: 8
+    }));
+    model.add(tf.layers.dense({
+        activation: "relu",
+        units: 4
+    }));
+    model.add(tf.layers.dense({
+        activation: "relu",
+        units: 2
+    }));
+    model.add(tf.layers.dense({
+        activation: "sigmoid",
+        units: 1
+    }));
 
         // Compile the model using the binaryCrossentropy loss, 
         // the rmsprop optimizer, and accuracy for your metrics. 
         model.compile({
             loss: "binaryCrossentropy",
-            optimizer: tf.train.rmsprop(0.07)
+            optimizer: tf.train.rmsprop(0.07),
+            metrics:['accuracy']
         }); // YOUR CODE HERE
 
 
@@ -126,8 +127,9 @@
             epochs: 100,
             validationData: convertedTestingData,
             callbacks: {
-                onEpochEnd: async (epoch, logs) => {
+                onEpochEnd: async (epoch, logs, ...abc) => {
                     console.log("Epoch: " + epoch + " Loss: " + logs.loss + " Accuracy: " + logs.acc);
+                    console.log(logs)
                 }
             }
         });
